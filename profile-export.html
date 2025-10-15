@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Eduvos Innovation Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --background: 220 13% 9%;
+            --foreground: 220 14% 96%;
+            --card: 220 13% 9%;
+            --card-foreground: 220 14% 96%;
+            --popover: 220 13% 9%;
+            --popover-foreground: 220 14% 96%;
+            --primary: 346 87% 43%;
+            --primary-foreground: 0 0% 100%;
+            --secondary: 220 13% 15%;
+            --secondary-foreground: 220 14% 96%;
+            --muted: 220 13% 15%;
+            --muted-foreground: 220 9% 46%;
+            --accent: 220 13% 15%;
+            --accent-foreground: 220 14% 96%;
+            --destructive: 0 84% 60%;
+            --destructive-foreground: 220 14% 96%;
+            --border: 220 13% 15%;
+            --input: 220 13% 15%;
+            --ring: 346 87% 43%;
+            --radius: 0.5rem;
+            --surface: 220 13% 11%;
+            --netflix-red: 346 87% 43%;
+            --gradient-primary: linear-gradient(135deg, hsl(346, 87%, 43%), hsl(346, 87%, 58%));
+            --gradient-accent: linear-gradient(135deg, hsl(346, 87%, 43%), hsl(25, 95%, 53%));
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Navbar - same as dashboard */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background-color: hsla(var(--background), 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid hsl(var(--border));
+            height: 64px;
+        }
+        
+        .navbar-content {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .search-container {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+            background-color: hsl(var(--surface));
+            border: 1px solid hsl(var(--border));
+            border-radius: 6px;
+            color: hsl(var(--foreground));
+            font-size: 14px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: hsl(var(--primary));
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: hsl(var(--muted-foreground));
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            text-decoration: none;
+            color: hsl(var(--muted-foreground));
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-link:hover {
+            color: hsl(var(--primary));
+        }
+        
+        .subscribe-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid hsl(var(--primary));
+            border-radius: 6px;
+            color: hsl(var(--primary));
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .subscribe-btn:hover {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+        
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: hsl(var(--destructive));
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: hsl(var(--surface));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid hsl(var(--primary));
+            transition: border-color 0.2s;
+        }
+        
+        /* Main Content */
+        .main {
+            padding-top: 80px;
+            padding-bottom: 2rem;
+        }
+        
+        .card {
+            background-color: hsl(var(--surface));
+            border: 1px solid hsl(var(--border));
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Tabs */
+        .tabs-container {
+            margin-bottom: 2rem;
+        }
+        
+        .tabs-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background-color: hsl(var(--surface));
+            border-radius: 6px;
+            padding: 0.25rem;
+            margin-bottom: 2rem;
+        }
+        
+        .tab-trigger {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            border: none;
+            background: transparent;
+            color: hsl(var(--muted-foreground));
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tab-trigger.active {
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+        
+        /* Profile Header */
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .profile-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+        
+        .profile-avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background-color: hsl(var(--muted));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: hsl(var(--foreground));
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-name-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .profile-email {
+            color: hsl(var(--muted-foreground));
+        }
+        
+        .edit-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid hsl(var(--border));
+            border-radius: 6px;
+            color: hsl(var(--foreground));
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .edit-btn:hover {
+            border-color: hsl(var(--primary));
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: hsl(var(--muted-foreground));
+        }
+        
+        .profile-meta {
+            display: flex;
+            gap: 1rem;
+            color: hsl(var(--muted-foreground));
+            font-size: 14px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        /* Achievements */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        
+        .achievement-card {
+            background-color: hsl(var(--background));
+            border: 1px solid hsl(var(--border));
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .achievement-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .achievement-desc {
+            font-size: 14px;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 0.5rem;
+        }
+        
+        .achievement-date {
+            font-size: 12px;
+            padding: 0.25rem 0.5rem;
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        /* Notifications */
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid hsl(var(--border));
+            margin-bottom: 1rem;
+        }
+        
+        .notification-item.unread {
+            background-color: hsl(var(--primary), 0.05);
+            border-color: hsl(var(--primary), 0.2);
+        }
+        
+        .notification-icon {
+            font-size: 1.25rem;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-message {
+            font-size: 14px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-time {
+            font-size: 12px;
+            color: hsl(var(--muted-foreground));
+        }
+        
+        .notification-dot {
+            width: 8px;
+            height: 8px;
+            background-color: hsl(var(--primary));
+            border-radius: 50%;
+            margin-top: 0.25rem;
+        }
+        
+        /* Settings */
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+        
+        .settings-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-info h4 {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .setting-info p {
+            font-size: 12px;
+            color: hsl(var(--muted-foreground));
+        }
+        
+        .switch {
+            width: 44px;
+            height: 24px;
+            background-color: hsl(var(--muted));
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .switch.active {
+            background-color: hsl(var(--primary));
+        }
+        
+        .switch-thumb {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+        
+        .switch.active .switch-thumb {
+            transform: translateX(20px);
+        }
+        
+        .separator {
+            height: 1px;
+            background-color: hsl(var(--border));
+            margin: 1.5rem 0;
+        }
+        
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-main {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-name-section {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .tabs-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .search-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">I</div>
+                <span class="logo-text">Ideas</span>
+            </a>
+            
+            <div class="search-container">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" class="search-input" placeholder="Search trending ideas...">
+            </div>
+            
+            <div class="nav-links">
+                <a href="#" class="nav-link">
+                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 3v5h5M3 12l6-6h8l4 4v5H8l-4-4z"></path>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="#" class="subscribe-btn">
+                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                        <path d="M3 10l9 6 9-6"></path>
+                    </svg>
+                    Subscribe
+                </a>
+                
+                <div class="notification-bell">
+                    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <div class="notification-badge">3</div>
+                </div>
+                
+                <div class="avatar">
+                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container" style="max-width: 1400px;">
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tabs-list">
+                    <button class="tab-trigger active">Profile</button>
+                    <button class="tab-trigger">Achievements</button>
+                    <button class="tab-trigger">Notifications</button>
+                    <button class="tab-trigger">Settings</button>
+                </div>
+            </div>
+
+            <!-- Profile Tab Content -->
+            <div class="tab-content">
+                <!-- Profile Header -->
+                <div class="card">
+                    <div class="profile-header">
+                        <div class="profile-main">
+                            <div class="profile-avatar">SC</div>
+                            
+                            <div class="profile-info">
+                                <div class="profile-name-section">
+                                    <div>
+                                        <h1 class="profile-name">Sarah Chen</h1>
+                                        <p class="profile-email">sarah.chen@example.com</p>
+                                    </div>
+                                    <button class="edit-btn">
+                                        <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                        Edit Profile
+                                    </button>
+                                </div>
+                                
+                                <div class="stats-grid">
+                                    <div class="stat-item">
+                                        <div class="stat-value">12</div>
+                                        <div class="stat-label">Ideas</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">45.3K</div>
+                                        <div class="stat-label">Views</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">3.4K</div>
+                                        <div class="stat-label">Likes</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">1.3K</div>
+                                        <div class="stat-label">Followers</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-value">342</div>
+                                        <div class="stat-label">Following</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="profile-meta">
+                                    <div class="meta-item">
+                                        <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                        San Francisco, CA
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                        </svg>
+                                        sarahchen.dev
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                                        </svg>
+                                        Joined March 2023
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio Section -->
+                <div class="card">
+                    <h2 style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 600;">About</h2>
+                    <p style="color: hsl(var(--muted-foreground));">
+                        Senior AI Engineer at TechCorp with 8+ years in machine learning and fintech. Passionate about creating innovative solutions that make technology accessible to everyone.
+                    </p>
+                </div>
+
+                <!-- Achievements Section -->
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="8" r="7"></circle>
+                            <polyline points="8.21,13.89 7,23 12,20 17,23 15.79,13.88"></polyline>
+                        </svg>
+                        Your Achievements
+                    </h2>
+                    
+                    <div class="achievements-grid">
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🎯</div>
+                            <h3 class="achievement-name">First Idea</h3>
+                            <p class="achievement-desc">Posted your first idea</p>
+                            <span class="achievement-date">Earned March 2023</span>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🔥</div>
+                            <h3 class="achievement-name">Trending Creator</h3>
+                            <p class="achievement-desc">Had an idea reach trending</p>
+                            <span class="achievement-date">Earned April 2023</span>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">👁️</div>
+                            <h3 class="achievement-name">Popular Voice</h3>
+                            <p class="achievement-desc">Received 1000+ views</p>
+                            <span class="achievement-date">Earned May 2023</span>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">❤️</div>
+                            <h3 class="achievement-name">Community Favorite</h3>
+                            <p class="achievement-desc">Received 500+ likes</p>
+                            <span class="achievement-date">Earned June 2023</span>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">💬</div>
+                            <h3 class="achievement-name">Conversation Starter</h3>
+                            <p class="achievement-desc">Received 100+ comments</p>
+                            <span class="achievement-date">Earned July 2023</span>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">⭐</div>
+                            <h3 class="achievement-name">Rising Star</h3>
+                            <p class="achievement-desc">Gained 1000+ followers</p>
+                            <span class="achievement-date">Earned August 2023</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        Notifications
+                    </h2>
+                    
+                    <div class="notification-item unread">
+                        <div class="notification-icon">❤️</div>
+                        <div class="notification-content">
+                            <p class="notification-message">Michael Rodriguez liked your idea 'AI-Powered Personal Finance Assistant'</p>
+                            <p class="notification-time">2 minutes ago</p>
+                        </div>
+                        <div class="notification-dot"></div>
+                    </div>
+                    
+                    <div class="notification-item unread">
+                        <div class="notification-icon">💬</div>
+                        <div class="notification-content">
+                            <p class="notification-message">Jennifer Park commented on your idea 'Sustainable Urban Farming Network'</p>
+                            <p class="notification-time">1 hour ago</p>
+                        </div>
+                        <div class="notification-dot"></div>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div class="notification-icon">👥</div>
+                        <div class="notification-content">
+                            <p class="notification-message">David Thompson started following you</p>
+                            <p class="notification-time">3 hours ago</p>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div class="notification-icon">🏆</div>
+                        <div class="notification-content">
+                            <p class="notification-message">You earned the 'Innovation Leader' badge!</p>
+                            <p class="notification-time">1 day ago</p>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item">
+                        <div class="notification-icon">🔥</div>
+                        <div class="notification-content">
+                            <p class="notification-message">Your idea 'Virtual Reality Therapy Sessions' is now trending!</p>
+                            <p class="notification-time">2 days ago</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div class="card">
+                    <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        Account Settings
+                    </h2>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-title">Notification Preferences</h3>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Email Notifications</h4>
+                                <p>Receive notifications via email</p>
+                            </div>
+                            <div class="switch active">
+                                <div class="switch-thumb"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>New Followers</h4>
+                                <p>Get notified when someone follows you</p>
+                            </div>
+                            <div class="switch active">
+                                <div class="switch-thumb"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Comments on Ideas</h4>
+                                <p>Get notified when someone comments on your ideas</p>
+                            </div>
+                            <div class="switch active">
+                                <div class="switch-thumb"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Likes on Ideas</h4>
+                                <p>Get notified when someone likes your ideas</p>
+                            </div>
+                            <div class="switch active">
+                                <div class="switch-thumb"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Weekly Digest</h4>
+                                <p>Receive a weekly summary of your activity</p>
+                            </div>
+                            <div class="switch">
+                                <div class="switch-thumb"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="separator"></div>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-title">Privacy Settings</h3>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Public Profile</h4>
+                                <p>Make your profile visible to everyone</p>
+                            </div>
+                            <div class="switch active">
+                                <div class="switch-thumb"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Show in Search</h4>
+                                <p>Allow your profile to appear in search results</p>
+                            </div>
+                            <div class="switch active">
+                                <div class="switch-thumb"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

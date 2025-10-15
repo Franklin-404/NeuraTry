@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Powered Personal Finance Assistant - Idea Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    :root {
+      --background: 210 40% 2%;
+      --foreground: 213 31% 91%;
+      --muted: 223 47% 11%;
+      --muted-foreground: 215.4 16.3% 56.9%;
+      --popover: 224 71% 4%;
+      --popover-foreground: 215 20.2% 65.1%;
+      --border: 216 34% 17%;
+      --input: 216 34% 17%;
+      --card: 224 71% 4%;
+      --primary: 355 100% 50%;
+      --primary-foreground: 210 40% 98%;
+      --secondary: 222.2 84% 4.9%;
+      --secondary-foreground: 210 40% 98%;
+      --accent: 216 34% 17%;
+      --accent-foreground: 210 40% 98%;
+      --destructive: 0 63% 31%;
+      --destructive-foreground: 210 40% 98%;
+      --ring: 355 100% 50%;
+      --radius: 0.5rem;
+      --netflix-red: 355 100% 50%;
+      --netflix-black: 0 0% 8%;
+      --netflix-dark-gray: 0 0% 14%;
+      --netflix-light-gray: 0 0% 92%;
+      --gradient-primary: linear-gradient(135deg, hsl(355, 100%, 50%), hsl(340, 100%, 45%));
+      --gradient-surface: linear-gradient(145deg, hsl(224, 71%, 4%), hsl(216, 34%, 17%));
+      --surface: 224 71% 4%;
+      --surface-foreground: 213 31% 91%;
+    }
+
+    * {
+      border-color: hsl(var(--border));
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+    }
+
+    .bg-background { background-color: hsl(var(--background)); }
+    .bg-surface { background-color: hsl(var(--surface)); }
+    .bg-muted { background-color: hsl(var(--muted)); }
+    .bg-primary { background-color: hsl(var(--primary)); }
+    .bg-secondary { background-color: hsl(var(--secondary)); }
+    .bg-accent { background-color: hsl(var(--accent)); }
+    
+    .text-foreground { color: hsl(var(--foreground)); }
+    .text-muted-foreground { color: hsl(var(--muted-foreground)); }
+    .text-primary-foreground { color: hsl(var(--primary-foreground)); }
+    .text-secondary-foreground { color: hsl(var(--secondary-foreground)); }
+    
+    .border-border { border-color: hsl(var(--border)); }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: calc(var(--radius) - 2px);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    
+    .btn-primary {
+      background-color: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+    }
+    
+    .btn-outline {
+      border: 1px solid hsl(var(--border));
+      background-color: transparent;
+      color: hsl(var(--foreground));
+    }
+    
+    .btn-outline:hover {
+      background-color: hsl(var(--accent));
+      color: hsl(var(--accent-foreground));
+    }
+    
+    .btn-ghost {
+      background-color: transparent;
+      color: hsl(var(--muted-foreground));
+    }
+    
+    .btn-ghost:hover {
+      background-color: hsl(var(--accent));
+      color: hsl(var(--accent-foreground));
+    }
+    
+    .card {
+      border-radius: var(--radius);
+      border: 1px solid hsl(var(--border));
+      background-color: hsl(var(--surface));
+      color: hsl(var(--surface-foreground));
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: calc(var(--radius) - 2px);
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    
+    .badge-secondary {
+      background-color: hsl(var(--secondary));
+      color: hsl(var(--secondary-foreground));
+    }
+    
+    .badge-outline {
+      color: hsl(var(--foreground));
+      border: 1px solid hsl(var(--border));
+      background-color: transparent;
+    }
+    
+    .avatar {
+      position: relative;
+      display: flex;
+      height: 2.5rem;
+      width: 2.5rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: hsl(var(--muted));
+      color: hsl(var(--foreground));
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    
+    .avatar-lg {
+      height: 3rem;
+      width: 3rem;
+    }
+    
+    .textarea {
+      width: 100%;
+      border-radius: var(--radius);
+      border: 1px solid hsl(var(--border));
+      background-color: hsl(var(--background));
+      padding: 0.75rem;
+      color: hsl(var(--foreground));
+      resize: vertical;
+    }
+    
+    .prose p {
+      margin-bottom: 1rem;
+    }
+    
+    .prose p:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+    <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-8">
+        <a href="/" class="text-xl font-bold text-primary">IdeaHub</a>
+        <div class="hidden md:flex items-center space-x-6">
+          <a href="/ideas" class="text-muted-foreground hover:text-foreground transition-colors">Trending Ideas</a>
+          <a href="/dashboard" class="text-muted-foreground hover:text-foreground transition-colors">Dashboard</a>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button class="btn btn-outline">Subscribe</button>
+        <div class="avatar">
+          <span>JD</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div style="min-height: 100vh; padding-top: 5rem;">
+    <main class="container mx-auto px-4 py-8" style="max-width: 64rem;">
+      <!-- Back Button -->
+      <a href="/ideas" class="inline-flex items-center text-muted-foreground hover:text-foreground mb-6" style="text-decoration: none;">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m7-7l-7 7 7 7"/>
+        </svg>
+        Back to Ideas
+      </a>
+
+      <!-- Cover Image -->
+      <div class="relative mb-8">
+        <div style="width: 100%; height: 20rem; background: linear-gradient(135deg, hsl(220, 40%, 20%), hsl(240, 30%, 25%)); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: hsl(var(--muted-foreground)); font-size: 1.125rem;">
+          AI-Powered Finance Assistant Cover Image
+        </div>
+        <div class="absolute top-4 right-4 flex items-center space-x-2">
+          <div class="flex items-center space-x-1 bg-background/80 backdrop-blur-sm rounded-md px-3 py-2">
+            <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 24 24">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <span class="font-medium text-foreground">4.8</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div style="display: grid; grid-template-columns: 1fr; gap: 2rem;">
+        <div style="grid-column: span 2;">
+          <!-- Title and Meta -->
+          <div class="mb-6">
+            <span class="badge badge-secondary mb-3">AI & Technology</span>
+            <h1 style="font-size: 2.25rem; font-weight: 700; color: hsl(var(--foreground)); margin-bottom: 1rem;">AI-Powered Personal Finance Assistant</h1>
+            <p style="font-size: 1.125rem; color: hsl(var(--muted-foreground)); margin-bottom: 1.5rem;">A comprehensive smart assistant that analyzes spending patterns and provides personalized financial advice using advanced machine learning algorithms.</p>
+            
+            <!-- Stats -->
+            <div style="display: flex; align-items: center; gap: 1.5rem; font-size: 0.875rem; color: hsl(var(--muted-foreground)); margin-bottom: 1.5rem;">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+                <span>12,500 views</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                </svg>
+                <span>892 likes</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                <span>156 comments</span>
+              </div>
+              <span>2 hours ago</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem;">
+              <button class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem;">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                </svg>
+                <span>Like</span>
+              </button>
+              <button class="btn btn-outline">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+                </svg>
+                <span>Save</span>
+              </button>
+              <button class="btn btn-outline">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+                </svg>
+                Share
+              </button>
+            </div>
+          </div>
+
+          <!-- Full Description -->
+          <div class="card mb-8" style="padding: 1.5rem;">
+            <h2 style="font-size: 1.25rem; font-weight: 600; color: hsl(var(--foreground)); margin-bottom: 1rem;">Detailed Description</h2>
+            <div class="prose" style="color: hsl(var(--muted-foreground));">
+              <p>This innovative AI-powered personal finance assistant represents a revolutionary approach to managing personal finances. By leveraging cutting-edge machine learning algorithms, the system continuously analyzes user spending patterns, income streams, and financial goals to provide highly personalized financial advice.</p>
+              
+              <p><strong>Key Features:</strong><br>
+              • Real-time expense tracking and categorization<br>
+              • Predictive budgeting based on historical data<br>
+              • Investment recommendations tailored to risk tolerance<br>
+              • Bill payment reminders and optimization suggestions<br>
+              • Credit score monitoring and improvement tips<br>
+              • Tax optimization strategies<br>
+              • Emergency fund planning and goal setting</p>
+              
+              <p>The AI learns from user behavior and preferences, becoming more accurate and helpful over time. It integrates with major banks and financial institutions to provide a comprehensive view of your financial health while maintaining the highest security standards.</p>
+              
+              <p><strong>Target Market:</strong><br>
+              Young professionals, families, and anyone looking to improve their financial literacy and management skills. The assistant is designed to be user-friendly for beginners while offering advanced features for experienced investors.</p>
+              
+              <p><strong>Technical Implementation:</strong><br>
+              Built using Python and TensorFlow for the AI components, with a React frontend and secure API integrations. The system uses encrypted data storage and follows strict privacy protocols to protect sensitive financial information.</p>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="mb-8">
+            <h3 style="font-size: 1.125rem; font-weight: 600; color: hsl(var(--foreground)); margin-bottom: 0.75rem;">Tags</h3>
+            <div style="display: flex; flex-wrap: gap: 0.5rem;">
+              <span class="badge badge-outline">#AI</span>
+              <span class="badge badge-outline">#Machine Learning</span>
+              <span class="badge badge-outline">#Finance</span>
+              <span class="badge badge-outline">#Personal Assistant</span>
+              <span class="badge badge-outline">#FinTech</span>
+            </div>
+          </div>
+
+          <!-- Comments Section -->
+          <div>
+            <h3 style="font-size: 1.25rem; font-weight: 600; color: hsl(var(--foreground)); margin-bottom: 1.5rem;">
+              Comments (3)
+            </h3>
+            
+            <!-- Add Comment -->
+            <div class="card mb-6" style="padding: 1.5rem;">
+              <div style="display: flex; gap: 1rem;">
+                <div class="avatar">You</div>
+                <div style="flex: 1;">
+                  <textarea class="textarea mb-3" rows="3" placeholder="Share your thoughts on this idea..."></textarea>
+                  <button class="btn btn-primary">Post Comment</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comments List -->
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+              <!-- Comment 1 -->
+              <div class="card" style="padding: 1.5rem;">
+                <div style="display: flex; gap: 1rem;">
+                  <div class="avatar">MR</div>
+                  <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                      <span style="font-weight: 500; color: hsl(var(--foreground));">Michael Rodriguez</span>
+                      <span style="font-size: 0.75rem; color: hsl(var(--muted-foreground));">1 hour ago</span>
+                    </div>
+                    <p style="color: hsl(var(--muted-foreground)); margin-bottom: 0.75rem;">This is exactly what I've been looking for! The AI-driven approach to personal finance could really help people make better financial decisions. Have you considered adding cryptocurrency tracking?</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                      <button class="btn btn-ghost" style="height: 2rem; padding: 0 0.5rem; font-size: 0.75rem;">
+                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                        </svg>
+                        12
+                      </button>
+                      <button class="btn btn-ghost" style="height: 2rem; padding: 0 0.5rem; font-size: 0.75rem;">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10H5a2 2 0 00-2 2v6a2 2 0 002 2h2.5"/>
+                        </svg>
+                      </button>
+                      <button class="btn btn-ghost" style="height: 2rem; padding: 0 0.5rem; font-size: 0.75rem; color: hsl(var(--muted-foreground));">Reply</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Comment 2 -->
+              <div class="card" style="padding: 1.5rem;">
+                <div style="display: flex; gap: 1rem;">
+                  <div class="avatar">JP</div>
+                  <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                      <span style="font-weight: 500; color: hsl(var(--foreground));">Jennifer Park</span>
+                      <span style="font-size: 0.75rem; color: hsl(var(--muted-foreground));">3 hours ago</span>
+                    </div>
+                    <p style="color: hsl(var(--muted-foreground)); margin-bottom: 0.75rem;">Great concept! I'm particularly interested in the tax optimization features. How would this handle different tax jurisdictions for international users?</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                      <button class="btn btn-ghost" style="height: 2rem; padding: 0 0.5rem; font-size: 0.75rem;">
+                        <svg class="w-3 h-3 mr-1 fill-current" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                        </svg>
+                        8
+                      </button>
+                      <button class="btn btn-ghost" style="height: 2rem; padding: 0 0.5rem; font-size: 0.75rem;">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10H5a2 2 0 00-2 2v6a2 2 0 002 2h2.5"/>
+                        </svg>
+                      </button>
+                      <button class="btn btn-ghost" style="height: 2rem; padding: 0 0.5rem; font-size: 0.75rem; color: hsl(var(--muted-foreground));">Reply</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Comment 3 -->
+              <div class="card" style="padding: 1.5rem;">
+                <div style="display: flex; gap: 1rem;">
+                  <div class="avatar">DT</div>
+                  <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                      <span style="font-weight: 500; color: hsl(var(--foreground));">David Thompson</span>
+                      <span style="font-size: 0.75rem; color: hsl(var(--muted-foreground));">5 hours ago</span>
+                    </div>
+                    <p style="color: hsl(var(--muted-foreground)); margin-bottom: 0.75rem;">The security aspect is crucial for this type of application. What specific encryption methods are you planning to use for protecting financial data?</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                      <button class="btn btn-ghost" style="height: 2rem; padding: 0 0.5rem; font-size: 0.75rem;">
+                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                        </svg>
+                        15
+                      </button>
+                      <button class="btn btn-ghost" style="height: 2rem; padding: 0 0.5rem; font-size: 0.75rem;">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10H5a2 2 0 00-2 2v6a2 2 0 002 2h2.5"/>
+                        </svg>
+                      </button>
+                      <button class="btn btn-ghost" style="height: 2rem; padding: 0 0.5rem; font-size: 0.75rem; color: hsl(var(--muted-foreground));">Reply</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem;">
+          <!-- Author Card -->
+          <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; color: hsl(var(--foreground)); margin-bottom: 1rem;">About the Author</h3>
+            <div style="display: flex; align-items: flex-start; gap: 1rem;">
+              <div class="avatar avatar-lg">SC</div>
+              <div style="flex: 1;">
+                <h4 style="font-weight: 500; color: hsl(var(--foreground)); margin-bottom: 0.25rem;">Sarah Chen</h4>
+                <p style="font-size: 0.875rem; color: hsl(var(--muted-foreground)); margin-bottom: 0.75rem;">Senior AI Engineer at TechCorp, 8+ years in machine learning and fintech</p>
+                <button class="btn btn-outline" style="width: 100%; font-size: 0.875rem;">Follow</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Related Ideas -->
+          <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; color: hsl(var(--foreground)); margin-bottom: 1rem;">Related Ideas</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="display: flex; gap: 0.75rem;">
+                <div style="width: 4rem; height: 4rem; background: linear-gradient(135deg, hsl(200, 40%, 20%), hsl(220, 30%, 25%)); border-radius: 0.25rem; flex-shrink: 0;"></div>
+                <div style="flex: 1;">
+                  <h4 style="font-size: 0.875rem; font-weight: 500; color: hsl(var(--foreground)); margin-bottom: 0.25rem; line-height: 1.2;">Related AI Idea 1</h4>
+                  <p style="font-size: 0.75rem; color: hsl(var(--muted-foreground));">1.2k views</p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 0.75rem;">
+                <div style="width: 4rem; height: 4rem; background: linear-gradient(135deg, hsl(180, 40%, 20%), hsl(200, 30%, 25%)); border-radius: 0.25rem; flex-shrink: 0;"></div>
+                <div style="flex: 1;">
+                  <h4 style="font-size: 0.875rem; font-weight: 500; color: hsl(var(--foreground)); margin-bottom: 0.25rem; line-height: 1.2;">Related AI Idea 2</h4>
+                  <p style="font-size: 0.75rem; color: hsl(var(--muted-foreground));">1.2k views</p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 0.75rem;">
+                <div style="width: 4rem; height: 4rem; background: linear-gradient(135deg, hsl(160, 40%, 20%), hsl(180, 30%, 25%)); border-radius: 0.25rem; flex-shrink: 0;"></div>
+                <div style="flex: 1;">
+                  <h4 style="font-size: 0.875rem; font-weight: 500; color: hsl(var(--foreground)); margin-bottom: 0.25rem; line-height: 1.2;">Related AI Idea 3</h4>
+                  <p style="font-size: 0.75rem; color: hsl(var(--muted-foreground));">1.2k views</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

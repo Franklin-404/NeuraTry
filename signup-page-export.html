@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eduvos Innovation Hub - Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            /* Netflix-inspired dark theme */
+            --background: 0 0% 8%;
+            --foreground: 0 0% 95%;
+            --card: 0 0% 12%;
+            --card-foreground: 0 0% 95%;
+            --primary: 0 82% 48%;
+            --primary-foreground: 0 0% 100%;
+            --secondary: 0 0% 18%;
+            --secondary-foreground: 0 0% 85%;
+            --muted: 0 0% 15%;
+            --muted-foreground: 0 0% 65%;
+            --accent: 0 82% 55%;
+            --accent-foreground: 0 0% 100%;
+            --border: 0 0% 20%;
+            --input: 0 0% 15%;
+            --ring: 0 82% 48%;
+            --netflix-red: 0 82% 48%;
+            --netflix-red-dark: 0 82% 38%;
+            --netflix-red-light: 0 82% 58%;
+            --surface: 0 0% 12%;
+            --surface-elevated: 0 0% 16%;
+            --gradient-hero: linear-gradient(135deg, hsl(0 0% 8%) 0%, hsl(0 0% 12%) 50%, hsl(0 82% 10%) 100%);
+            --gradient-card: linear-gradient(145deg, hsl(0 0% 12%) 0%, hsl(0 0% 16%) 100%);
+            --gradient-accent: linear-gradient(135deg, hsl(0 82% 48%) 0%, hsl(0 82% 58%) 100%);
+        }
+        
+        body {
+            background: hsl(var(--background));
+            color: hsl(var(--foreground));
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .signup-form-animation {
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .service-card:hover {
+            animation: subtle-glow 0.3s ease-in-out;
+        }
+        
+        @keyframes subtle-glow {
+            0% {
+                box-shadow: 0 0 0 rgba(229, 9, 20, 0);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(229, 9, 20, 0.1);
+            }
+            100% {
+                box-shadow: 0 0 0 rgba(229, 9, 20, 0);
+            }
+        }
+        
+        .bg-gradient-hero {
+            background: var(--gradient-hero);
+        }
+        
+        .bg-gradient-card {
+            background: var(--gradient-card);
+        }
+        
+        .bg-netflix-red {
+            background: hsl(var(--netflix-red));
+        }
+        
+        .text-netflix-red {
+            color: hsl(var(--netflix-red));
+        }
+        
+        .border-netflix-red {
+            border-color: hsl(var(--netflix-red));
+        }
+        
+        .bg-card {
+            background: hsl(var(--card));
+        }
+        
+        .text-card-foreground {
+            color: hsl(var(--card-foreground));
+        }
+        
+        .bg-input {
+            background: hsl(var(--input));
+        }
+        
+        .border-input {
+            border-color: hsl(var(--border));
+        }
+        
+        .text-muted-foreground {
+            color: hsl(var(--muted-foreground));
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Hero Section with Signup Form -->
+    <div class="relative min-h-screen flex items-center justify-center bg-gradient-hero">
+        <!-- Background overlay -->
+        <div class="absolute inset-0 bg-black/50"></div>
+        
+        <!-- Background pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, hsl(0 82% 48% / 0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, hsl(0 82% 48% / 0.1) 0%, transparent 50%);"></div>
+        </div>
+        
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Left side - Hero Content -->
+                <div class="text-center lg:text-left space-y-8">
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+                        Welcome to
+                        <span class="text-netflix-red block">Eduvos Innovation Hub</span>
+                    </h1>
+                    <p class="text-xl text-gray-300 leading-relaxed max-w-2xl">
+                        Transform ideas into impact. Join our platform where innovation meets execution, 
+                        and every voice contributes to the future of education technology.
+                    </p>
+                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                        <div class="flex items-center gap-2 text-gray-300">
+                            <svg class="w-5 h-5 text-netflix-red" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Innovation Platform</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-gray-300">
+                            <svg class="w-5 h-5 text-netflix-red" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Collaborative Tools</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-gray-300">
+                            <svg class="w-5 h-5 text-netflix-red" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Impact Tracking</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right side - Signup Form -->
+                <div class="w-full max-w-md mx-auto lg:mx-0">
+                    <div class="bg-card/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 signup-form-animation shadow-2xl">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold text-card-foreground mb-2">Join the Hub</h2>
+                            <p class="text-muted-foreground">Start your innovation journey today</p>
+                        </div>
+                        
+                        <form class="space-y-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-card-foreground">First Name</label>
+                                    <input 
+                                        type="text" 
+                                        class="w-full h-12 px-4 rounded-lg border border-input bg-input text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-netflix-red/50 focus:border-netflix-red transition-colors"
+                                        placeholder="John"
+                                    />
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-card-foreground">Last Name</label>
+                                    <input 
+                                        type="text" 
+                                        class="w-full h-12 px-4 rounded-lg border border-input bg-input text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-netflix-red/50 focus:border-netflix-red transition-colors"
+                                        placeholder="Doe"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-card-foreground">Email Address</label>
+                                <input 
+                                    type="email" 
+                                    class="w-full h-12 px-4 rounded-lg border border-input bg-input text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-netflix-red/50 focus:border-netflix-red transition-colors"
+                                    placeholder="john.doe@eduvos.com"
+                                />
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-card-foreground">Password</label>
+                                <div class="relative">
+                                    <input 
+                                        type="password" 
+                                        class="w-full h-12 px-4 pr-12 rounded-lg border border-input bg-input text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-netflix-red/50 focus:border-netflix-red transition-colors"
+                                        placeholder="Create a strong password"
+                                    />
+                                    <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-card-foreground transition-colors">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-card-foreground">Confirm Password</label>
+                                <input 
+                                    type="password" 
+                                    class="w-full h-12 px-4 rounded-lg border border-input bg-input text-card-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-netflix-red/50 focus:border-netflix-red transition-colors"
+                                    placeholder="Confirm your password"
+                                />
+                            </div>
+                            
+                            <button 
+                                type="submit" 
+                                class="w-full h-12 bg-netflix-red hover:bg-red-600 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-netflix-red/50 focus:ring-offset-2 focus:ring-offset-gray-900"
+                            >
+                                Create Account
+                            </button>
+                            
+                            <p class="text-center text-sm text-muted-foreground">
+                                Already have an account? 
+                                <a href="#" class="text-netflix-red hover:underline font-medium">Sign in</a>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Services Section -->
+    <section class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-white mb-4">Powerful Innovation Tools</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Our comprehensive platform provides everything you need to transform ideas into impactful solutions
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Evaluation Service -->
+                <div class="service-card bg-gradient-card p-8 rounded-2xl border border-white/10 hover:border-netflix-red/30 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-netflix-red/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-netflix-red/20 transition-colors">
+                        <svg class="w-8 h-8 text-netflix-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Evaluation & Scoring</h3>
+                    <p class="text-sm text-netflix-red mb-4 font-medium">Assessment Excellence</p>
+                    <p class="text-gray-300 leading-relaxed">
+                        Structured criteria and advanced scoring methods to assess idea feasibility, cost impact, and strategic alignment with precision.
+                    </p>
+                </div>
+                
+                <!-- Gamification Service -->
+                <div class="service-card bg-gradient-card p-8 rounded-2xl border border-white/10 hover:border-netflix-red/30 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-netflix-red/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-netflix-red/20 transition-colors">
+                        <svg class="w-8 h-8 text-netflix-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Motivation & Recognition</h3>
+                    <p class="text-sm text-netflix-red mb-4 font-medium">Engagement Engine</p>
+                    <p class="text-gray-300 leading-relaxed">
+                        Rewards system with points, badges, and leaderboards that encourage participation and recognize top contributors.
+                    </p>
+                </div>
+                
+                <!-- Search Service -->
+                <div class="service-card bg-gradient-card p-8 rounded-2xl border border-white/10 hover:border-netflix-red/30 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-netflix-red/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-netflix-red/20 transition-colors">
+                        <svg class="w-8 h-8 text-netflix-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Search & Filter</h3>
+                    <p class="text-sm text-netflix-red mb-4 font-medium">Discovery Made Easy</p>
+                    <p class="text-gray-300 leading-relaxed">
+                        Advanced search capabilities to find specific ideas, themes, and submissions with intelligent filtering by category and status.
+                    </p>
+                </div>
+                
+                <!-- Integration Service -->
+                <div class="service-card bg-gradient-card p-8 rounded-2xl border border-white/10 hover:border-netflix-red/30 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-netflix-red/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-netflix-red/20 transition-colors">
+                        <svg class="w-8 h-8 text-netflix-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Integration Capabilities</h3>
+                    <p class="text-sm text-netflix-red mb-4 font-medium">Seamless Connection</p>
+                    <p class="text-gray-300 leading-relaxed">
+                        Connect seamlessly with Eduvos systems including LMS, HR, email, and project management tools for unified workflow.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-white mb-6">Ready to Transform Education?</h2>
+            <p class="text-xl text-gray-300 mb-10 leading-relaxed">
+                Join thousands of educators and innovators who are already making a difference. 
+                Your ideas have the power to shape the future of learning.
+            </p>
+            <button class="bg-netflix-red hover:bg-red-600 text-white font-bold py-4 px-12 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-netflix-red/50 focus:ring-offset-2 focus:ring-offset-gray-900">
+                Get Started Today
+            </button>
+        </div>
+    </section>
+</body>
+</html>

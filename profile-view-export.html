@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - Ideas Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 0 0% 10%;
+      --card: 0 0% 98%;
+      --card-foreground: 0 0% 10%;
+      --primary: 0 82% 48%;
+      --primary-foreground: 0 0% 100%;
+      --secondary: 0 0% 96%;
+      --muted-foreground: 0 0% 45%;
+      --border: 0 0% 90%;
+      --surface: 0 0% 98%;
+      --gradient-accent: linear-gradient(135deg, hsl(0 82% 48%) 0%, hsl(0 82% 58%) 100%);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+      line-height: 1.6;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background-color: hsla(0, 0%, 100%, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid hsl(var(--border));
+    }
+
+    .navbar-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--gradient-accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.125rem;
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: hsl(var(--foreground));
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 28rem;
+      margin: 0 2rem;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.5rem;
+      background-color: hsl(var(--surface));
+      font-size: 0.875rem;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: hsl(var(--muted-foreground));
+      width: 16px;
+      height: 16px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: hsl(var(--muted-foreground));
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: hsl(var(--primary));
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      margin-top: 64px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      background: var(--gradient-accent);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .button:hover {
+      opacity: 0.9;
+    }
+
+    .button-ghost {
+      background: transparent;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: hsl(var(--foreground));
+    }
+
+    .profile-header {
+      text-align: center;
+    }
+
+    .avatar-large {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      border: 4px solid hsl(var(--primary) / 0.2);
+    }
+
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: hsl(var(--foreground));
+      margin-bottom: 0.25rem;
+    }
+
+    .username {
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 1rem;
+    }
+
+    .bio {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 1rem;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .info-link {
+      color: hsl(var(--primary));
+      text-decoration: none;
+    }
+
+    .info-link:hover {
+      text-decoration: underline;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 0.75rem;
+      background-color: hsl(var(--background));
+      border-radius: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: hsl(var(--primary));
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-badge {
+      padding: 0.375rem 0.75rem;
+      background-color: hsl(var(--secondary));
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      color: hsl(var(--foreground));
+    }
+
+    .achievements {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .tabs {
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-list {
+      display: flex;
+      gap: 0.25rem;
+      background-color: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.5rem;
+      padding: 0.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-trigger {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      font-weight: 500;
+      color: hsl(var(--muted-foreground));
+      transition: all 0.2s;
+    }
+
+    .tab-trigger.active {
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+    }
+
+    .idea-card {
+      background-color: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .idea-card:hover {
+      border-color: hsl(var(--primary) / 0.5);
+    }
+
+    .idea-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+
+    .idea-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: hsl(var(--foreground));
+    }
+
+    .badge {
+      padding: 0.25rem 0.75rem;
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.375rem;
+      font-size: 0.75rem;
+      color: hsl(var(--foreground));
+    }
+
+    .badge-winner {
+      background-color: hsla(45, 100%, 50%, 0.2);
+      color: hsl(45, 100%, 60%);
+      border-color: hsla(45, 100%, 50%, 0.3);
+    }
+
+    .badge-finalist {
+      background-color: hsla(217, 100%, 50%, 0.2);
+      color: hsl(217, 100%, 60%);
+      border-color: hsla(217, 100%, 50%, 0.3);
+    }
+
+    .idea-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .icon-md {
+      width: 20px;
+      height: 20px;
+    }
+
+    .icon-lg {
+      width: 24px;
+      height: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-bar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">I</div>
+        <span class="logo-text">Ideas</span>
+      </a>
+      
+      <div class="search-bar">
+        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text" class="search-input" placeholder="Search trending ideas...">
+      </div>
+      
+      <div class="nav-links">
+        <a href="#" class="nav-link">Ideas</a>
+        <a href="#" class="nav-link">Challenges</a>
+        <a href="#" class="nav-link">Leaderboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <button class="button button-ghost" style="margin-bottom: 1.5rem;">
+      <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Back
+    </button>
+
+    <div class="grid">
+      <!-- Left Column - Profile Info -->
+      <div>
+        <!-- Profile Card -->
+        <div class="card">
+          <div class="profile-header">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" alt="Profile" class="avatar-large">
+            <h2 class="profile-name">Sarah Johnson</h2>
+            <p class="username">@sarahj</p>
+            <p class="bio">Innovation enthusiast | Full-stack developer | AI/ML researcher | Building the future one idea at a time</p>
+            
+            <div class="profile-info">
+              <div class="info-item">
+                <svg class="icon-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                <span>San Francisco, CA</span>
+              </div>
+              <div class="info-item">
+                <svg class="icon-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                </svg>
+                <a href="#" class="info-link">sarahjohnson.dev</a>
+              </div>
+              <div class="info-item">
+                <svg class="icon-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <span>Joined January 2024</span>
+              </div>
+            </div>
+
+            <button class="button" style="width: 100%;">Follow</button>
+          </div>
+        </div>
+
+        <!-- Stats Card -->
+        <div class="card">
+          <h3 class="card-title">Statistics</h3>
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-value">23</div>
+              <div class="stat-label">Ideas</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">8</div>
+              <div class="stat-label">Challenges</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">5</div>
+              <div class="stat-label">Wins</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">4250</div>
+              <div class="stat-label">Points</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Skills Card -->
+        <div class="card">
+          <h3 class="card-title">Skills</h3>
+          <div class="skills">
+            <span class="skill-badge">AI/ML</span>
+            <span class="skill-badge">React</span>
+            <span class="skill-badge">Node.js</span>
+            <span class="skill-badge">Python</span>
+            <span class="skill-badge">UI/UX</span>
+            <span class="skill-badge">Blockchain</span>
+          </div>
+        </div>
+
+        <!-- Achievements Card -->
+        <div class="card">
+          <h3 class="card-title">Achievements</h3>
+          <div class="achievements">
+            <div class="achievement-item">
+              <svg class="icon-lg" style="color: hsl(45, 100%, 60%);" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+              </svg>
+              <span style="font-size: 0.875rem; color: hsl(var(--foreground));">Top Innovator</span>
+            </div>
+            <div class="achievement-item">
+              <svg class="icon-lg" style="color: hsl(217, 100%, 60%);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+              </svg>
+              <span style="font-size: 0.875rem; color: hsl(var(--foreground));">Challenge Master</span>
+            </div>
+            <div class="achievement-item">
+              <svg class="icon-lg" style="color: hsl(280, 100%, 60%);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span style="font-size: 0.875rem; color: hsl(var(--foreground));">Community Leader</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - Activity -->
+      <div>
+        <div class="tabs">
+          <div class="tab-list">
+            <button class="tab-trigger active">
+              <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+              Ideas
+            </button>
+            <button class="tab-trigger">
+              <svg class="icon" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+              </svg>
+              Challenges
+            </button>
+          </div>
+
+          <!-- Ideas Content -->
+          <div>
+            <div class="idea-card">
+              <div class="idea-header">
+                <h3 class="idea-title">AI-Powered Code Review Assistant</h3>
+                <span class="badge">Technology</span>
+              </div>
+              <div class="idea-meta">
+                <span>↑ 234 votes</span>
+                <span>💬 45 comments</span>
+              </div>
+            </div>
+
+            <div class="idea-card">
+              <div class="idea-header">
+                <h3 class="idea-title">Sustainable Food Delivery Network</h3>
+                <span class="badge">Sustainability</span>
+              </div>
+              <div class="idea-meta">
+                <span>↑ 189 votes</span>
+                <span>💬 32 comments</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

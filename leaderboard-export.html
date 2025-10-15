@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard - Ideas Platform</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 0 0% 10%;
+      --card: 0 0% 98%;
+      --card-foreground: 0 0% 10%;
+      --primary: 0 82% 48%;
+      --primary-foreground: 0 0% 100%;
+      --muted-foreground: 0 0% 45%;
+      --border: 0 0% 90%;
+      --surface: 0 0% 98%;
+      --gradient-accent: linear-gradient(135deg, hsl(0 82% 48%) 0%, hsl(0 82% 58%) 100%);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+      line-height: 1.6;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background-color: hsla(0, 0%, 100%, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid hsl(var(--border));
+    }
+
+    .navbar-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--gradient-accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.125rem;
+    }
+
+    .logo-text {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: hsl(var(--foreground));
+    }
+
+    .search-bar {
+      flex: 1;
+      max-width: 28rem;
+      margin: 0 2rem;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.5rem;
+      background-color: hsl(var(--surface));
+      font-size: 0.875rem;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: hsl(var(--muted-foreground));
+      width: 16px;
+      height: 16px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: hsl(var(--muted-foreground));
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: hsl(var(--primary));
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      margin-top: 64px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .header-title h1 {
+      font-size: 2.25rem;
+      font-weight: bold;
+      color: hsl(var(--foreground));
+    }
+
+    .header p {
+      color: hsl(var(--muted-foreground));
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      background-color: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.5rem;
+      padding: 0.25rem;
+      width: fit-content;
+      margin: 0 auto 2rem;
+    }
+
+    .tab {
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      font-weight: 500;
+      color: hsl(var(--muted-foreground));
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+    }
+
+    .podium {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto 2rem;
+    }
+
+    .podium-card {
+      background-color: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .podium-card:hover {
+      border-color: hsl(var(--primary) / 0.5);
+      box-shadow: 0 10px 30px -10px hsl(var(--primary) / 0.1);
+    }
+
+    .podium-card.first {
+      order: 1;
+    }
+
+    .podium-card.second {
+      order: 0;
+    }
+
+    .podium-card.third {
+      order: 2;
+    }
+
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      margin: 1rem auto;
+      border: 4px solid hsl(var(--primary) / 0.2);
+    }
+
+    .user-name {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: hsl(var(--foreground));
+      margin-bottom: 0.25rem;
+    }
+
+    .username {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 1rem;
+    }
+
+    .points-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .points-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: hsl(var(--foreground));
+    }
+
+    .points-label {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .stat-box {
+      background-color: hsl(var(--background));
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.125rem;
+      font-weight: bold;
+      color: hsl(var(--primary));
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .card {
+      background-color: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .leaderboard-item:hover {
+      background-color: hsl(var(--background));
+    }
+
+    .rank {
+      font-size: 1.5rem;
+      font-weight: bold;
+      width: 48px;
+      text-align: center;
+    }
+
+    .rank-gold {
+      color: hsl(45, 100%, 60%);
+    }
+
+    .rank-silver {
+      color: hsl(0, 0%, 60%);
+    }
+
+    .rank-bronze {
+      color: hsl(25, 100%, 60%);
+    }
+
+    .rank-default {
+      color: hsl(var(--muted-foreground));
+    }
+
+    .avatar-sm {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid hsl(var(--primary) / 0.2);
+    }
+
+    .user-info {
+      flex: 1;
+    }
+
+    .user-stats {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-item-value {
+      font-weight: 600;
+      color: hsl(var(--foreground));
+    }
+
+    .stat-item-label {
+      color: hsl(var(--muted-foreground));
+    }
+
+    .points-section {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .points-large {
+      font-size: 1.125rem;
+      font-weight: bold;
+      color: hsl(var(--foreground));
+    }
+
+    .your-rank-card {
+      background: var(--gradient-accent);
+      border: 1px solid hsl(var(--primary) / 0.5);
+      color: white;
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .icon-lg {
+      width: 40px;
+      height: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .podium {
+        grid-template-columns: 1fr;
+      }
+
+      .user-stats {
+        display: none;
+      }
+
+      .search-bar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="#" class="logo">
+        <div class="logo-icon">I</div>
+        <span class="logo-text">Ideas</span>
+      </a>
+      
+      <div class="search-bar">
+        <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input type="text" class="search-input" placeholder="Search trending ideas...">
+      </div>
+      
+      <div class="nav-links">
+        <a href="#" class="nav-link">Ideas</a>
+        <a href="#" class="nav-link">Challenges</a>
+        <a href="#" class="nav-link active">Leaderboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-title">
+        <svg class="icon-lg" style="color: hsl(var(--primary));" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+        </svg>
+        <h1>Leaderboard</h1>
+      </div>
+      <p>Top innovators and challenge winners ranked by their contributions</p>
+    </div>
+
+    <!-- Timeframe Tabs -->
+    <div class="tabs">
+      <button class="tab active">All Time</button>
+      <button class="tab">This Month</button>
+      <button class="tab">This Week</button>
+    </div>
+
+    <!-- Top 3 Podium -->
+    <div class="podium">
+      <!-- First Place -->
+      <a href="#" class="podium-card first">
+        <div>
+          <svg class="icon-lg" style="color: hsl(45, 100%, 60%); margin: 0 auto;" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+          </svg>
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" alt="Avatar" class="avatar">
+          <h3 class="user-name">Alex Chen</h3>
+          <p class="username">@alexchen</p>
+          <div class="points-display">
+            <svg class="icon" style="color: hsl(var(--primary));" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+            <span class="points-value">8540</span>
+            <span class="points-label">pts</span>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-value">45</div>
+            <div class="stat-label">Ideas</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Wins</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Second Place -->
+      <a href="#" class="podium-card second">
+        <div>
+          <svg class="icon-lg" style="color: hsl(0, 0%, 60%); margin: 0 auto;" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"></path>
+            <path d="M12 2L16 6L20 4L18 8L22 10L18 12L20 16L16 14L12 18L8 14L4 16L6 12L2 10L6 8L4 4L8 6L12 2Z"></path>
+          </svg>
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maria" alt="Avatar" class="avatar">
+          <h3 class="user-name">Maria Garcia</h3>
+          <p class="username">@mariag</p>
+          <div class="points-display">
+            <svg class="icon" style="color: hsl(var(--primary));" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+            <span class="points-value">7890</span>
+            <span class="points-label">pts</span>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-value">38</div>
+            <div class="stat-label">Ideas</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">10</div>
+            <div class="stat-label">Wins</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Third Place -->
+      <a href="#" class="podium-card third">
+        <div>
+          <svg class="icon-lg" style="color: hsl(25, 100%, 60%); margin: 0 auto;" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"></path>
+            <path d="M12 2L16 6L20 4L18 8L22 10L18 12L20 16L16 14L12 18L8 14L4 16L6 12L2 10L6 8L4 4L8 6L12 2Z"></path>
+          </svg>
+          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=David" alt="Avatar" class="avatar">
+          <h3 class="user-name">David Kim</h3>
+          <p class="username">@davidk</p>
+          <div class="points-display">
+            <svg class="icon" style="color: hsl(var(--primary));" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+            <span class="points-value">7420</span>
+            <span class="points-label">pts</span>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-value">42</div>
+            <div class="stat-label">Ideas</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">9</div>
+            <div class="stat-label">Wins</div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Full Leaderboard -->
+    <div class="card">
+      <a href="#" class="leaderboard-item">
+        <div class="rank rank-gold">
+          <svg class="icon-lg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+          </svg>
+        </div>
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" alt="Avatar" class="avatar-sm">
+        <div class="user-info">
+          <div class="user-name" style="font-size: 1rem;">Alex Chen</div>
+          <div class="username">@alexchen</div>
+        </div>
+        <div class="user-stats">
+          <div class="stat-item">
+            <div class="stat-item-value">45</div>
+            <div class="stat-item-label">Ideas</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item-value">12</div>
+            <div class="stat-item-label">Wins</div>
+          </div>
+        </div>
+        <div class="points-section">
+          <svg class="icon" style="color: hsl(var(--primary));" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <div>
+            <div class="points-large">8540</div>
+            <div style="font-size: 0.75rem; color: hsl(var(--muted-foreground));">points</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="leaderboard-item">
+        <div class="rank rank-silver">
+          <svg class="icon-lg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"></path>
+            <path d="M12 2L16 6L20 4L18 8L22 10L18 12L20 16L16 14L12 18L8 14L4 16L6 12L2 10L6 8L4 4L8 6L12 2Z"></path>
+          </svg>
+        </div>
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maria" alt="Avatar" class="avatar-sm">
+        <div class="user-info">
+          <div class="user-name" style="font-size: 1rem;">Maria Garcia</div>
+          <div class="username">@mariag</div>
+        </div>
+        <div class="user-stats">
+          <div class="stat-item">
+            <div class="stat-item-value">38</div>
+            <div class="stat-item-label">Ideas</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item-value">10</div>
+            <div class="stat-item-label">Wins</div>
+          </div>
+        </div>
+        <div class="points-section">
+          <svg class="icon" style="color: hsl(var(--primary));" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <div>
+            <div class="points-large">7890</div>
+            <div style="font-size: 0.75rem; color: hsl(var(--muted-foreground));">points</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="leaderboard-item">
+        <div class="rank rank-bronze">
+          <svg class="icon-lg" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"></path>
+            <path d="M12 2L16 6L20 4L18 8L22 10L18 12L20 16L16 14L12 18L8 14L4 16L6 12L2 10L6 8L4 4L8 6L12 2Z"></path>
+          </svg>
+        </div>
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=David" alt="Avatar" class="avatar-sm">
+        <div class="user-info">
+          <div class="user-name" style="font-size: 1rem;">David Kim</div>
+          <div class="username">@davidk</div>
+        </div>
+        <div class="user-stats">
+          <div class="stat-item">
+            <div class="stat-item-value">42</div>
+            <div class="stat-item-label">Ideas</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item-value">9</div>
+            <div class="stat-item-label">Wins</div>
+          </div>
+        </div>
+        <div class="points-section">
+          <svg class="icon" style="color: hsl(var(--primary));" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <div>
+            <div class="points-large">7420</div>
+            <div style="font-size: 0.75rem; color: hsl(var(--muted-foreground));">points</div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Your Rank -->
+    <div class="card your-rank-card">
+      <div class="leaderboard-item">
+        <div class="rank" style="color: white;">42</div>
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=You" alt="Avatar" class="avatar-sm" style="border-color: rgba(255,255,255,0.3);">
+        <div class="user-info">
+          <div class="user-name" style="font-size: 1rem; color: white;">Your Rank</div>
+          <div class="username" style="color: rgba(255,255,255,0.8);">Keep innovating to climb higher!</div>
+        </div>
+        <div class="points-section">
+          <svg class="icon" style="color: white;" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+          </svg>
+          <div>
+            <div class="points-large" style="color: white;">2,340</div>
+            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.8);">points</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
