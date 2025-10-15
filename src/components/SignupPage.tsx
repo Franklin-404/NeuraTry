@@ -53,59 +53,50 @@ export default function SignupPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle signup logic here
     console.log("Signup form submitted:", formData);
   };
 
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="relative h-screen flex items-center justify-center overflow-hidden">
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden py-16 md:py-0">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
         />
         <div className="absolute inset-0 bg-gradient-hero opacity-90" />
-        
+
         <div className="relative z-10 container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Side - Content */}
-            <div className="text-center lg:text-left">
-              <Badge variant="secondary" className="mb-6 bg-surface/50 backdrop-blur-sm border-netflix-red/20">
+            <div className="text-center lg:text-left flex flex-col justify-center space-y-6 lg:space-y-8">
+              <Badge variant="secondary" className="mb-4 md:mb-6 bg-surface/50 backdrop-blur-sm border-netflix-red/20">
                 Innovation Platform
               </Badge>
-              
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
                 Transform Ideas Into Impact
               </h1>
-              
-              <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
+
+              <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-lg lg:max-w-md mx-auto lg:mx-0">
                 Join Eduvos Innovation Hub and turn your creative vision into reality with our comprehensive idea management platform.
               </p>
 
-              <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                <Badge variant="outline" className="border-netflix-red/30 text-netflix-red-light">
-                  🎯 Structured Evaluation
-                </Badge>
-                <Badge variant="outline" className="border-netflix-red/30 text-netflix-red-light">
-                  🏆 Gamified Experience
-                </Badge>
-                <Badge variant="outline" className="border-netflix-red/30 text-netflix-red-light">
-                  🔍 Smart Search
-                </Badge>
+              <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+                <Badge variant="outline" className="border-netflix-red/30 text-netflix-red-light">🎯 Structured Evaluation</Badge>
+                <Badge variant="outline" className="border-netflix-red/30 text-netflix-red-light">🏆 Gamified Experience</Badge>
+                <Badge variant="outline" className="border-netflix-red/30 text-netflix-red-light">🔍 Smart Search</Badge>
               </div>
             </div>
 
             {/* Right Side - Signup Form */}
-            <div className="flex justify-center">
+            <div className="flex justify-center mt-8 lg:mt-0">
               <Card className="w-full max-w-md bg-surface/80 backdrop-blur-md border-border/50">
                 <CardHeader className="text-center">
                   <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-                  <CardDescription>
-                    Start your innovation journey today
-                  </CardDescription>
+                  <CardDescription>Start your innovation journey today</CardDescription>
                 </CardHeader>
-                
+
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
@@ -226,7 +217,6 @@ export default function SignupPage() {
                   <div className="flex items-center justify-center w-12 h-12 bg-netflix-red/10 rounded-lg mb-4">
                     <service.icon className="w-6 h-6 text-netflix-red" />
                   </div>
-                  
                   <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
                   <p className="text-netflix-red text-sm font-medium mb-3">{service.subtitle}</p>
                   <p className="text-muted-foreground text-sm leading-relaxed">
