@@ -1,4 +1,4 @@
-import { Search, Bell, User, Menu, X } from "lucide-react";
+import { Search, BarChart3, User, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -85,22 +85,24 @@ const Navbar = () => {
 
           <div className="relative">
             <Link to="/dashboard">
-              <Bell className="w-5 h-5 text-muted-foreground hover:text-foreground cursor-pointer transition-colors" />
-              <Badge
-                variant="destructive"
-                className="absolute -top-2 -right-2 w-4 h-4 p-0 flex items-center justify-center text-xs"
-              >
-                3
-              </Badge>
+            <BarChart3 className="w-6 h-6 text-primary hover:text-foreground cursor-pointer transition-colors" />
+              
             </Link>
           </div>
 
           <Link to="/profile">
             <Avatar className="w-8 h-8 cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all">
               <AvatarImage src="/placeholder.svg" />
+              
               <AvatarFallback className="bg-surface text-foreground">
                 <User className="w-4 h-4" />
               </AvatarFallback>
+              <Badge
+                variant="destructive"
+                className="absolute -bottom-0 -left-0 w-4 h-4 p-0 flex items-center justify-center text-xs"
+              >
+                3
+              </Badge>
             </Avatar>
           </Link>
         </div>
