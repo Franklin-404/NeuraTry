@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TrendingUp, Eye, Heart, MessageCircle, Star, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -18,6 +18,7 @@ import {
 const TrendingIdeas = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const mockIdeas = [
     {
@@ -49,20 +50,6 @@ const TrendingIdeas = () => {
       timeAgo: "5 hours ago"
     },
     {
-      id: 3,
-      title: "Virtual Reality Therapy Sessions",
-      description: "Immersive VR environments designed for mental health therapy and stress relief treatments.",
-      category: "Healthcare",
-      views: 15600,
-      likes: 1200,
-      comments: 234,
-      rating: 4.9,
-      trending: false,
-      coverImage: "/placeholder.svg",
-      author: "Dr. Emily Rodriguez",
-      timeAgo: "1 day ago"
-    },
-    {
       id: 4,
       title: "Smart Waste Management System",
       description: "IoT-enabled waste bins that optimize collection routes and reduce environmental impact.",
@@ -75,20 +62,6 @@ const TrendingIdeas = () => {
       coverImage: "/placeholder.svg",
       author: "Alex Thompson",
       timeAgo: "3 hours ago"
-    },
-    {
-      id: 5,
-      title: "Blockchain-Based Voting Platform",
-      description: "Secure, transparent digital voting system using blockchain technology for elections.",
-      category: "Blockchain",
-      views: 9800,
-      likes: 721,
-      comments: 198,
-      rating: 4.7,
-      trending: false,
-      coverImage: "/placeholder.svg",
-      author: "David Kim",
-      timeAgo: "6 hours ago"
     },
     {
       id: 6,
@@ -117,10 +90,18 @@ const TrendingIdeas = () => {
     return matchesSearch && matchesCategory;
   });
 
+  // Auto-swipe logic
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex(prev => (prev + 1) % trendingIdeasOnly.length);
+    }, 1000); // auto-swipe every 5s
+    return () => clearInterval(interval);
+  }, [trendingIdeasOnly.length]);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <main className="pt-20 container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -131,28 +112,25 @@ const TrendingIdeas = () => {
           <p className="text-muted-foreground">Discover the most innovative and popular ideas from our community</p>
         </div>
 
-        {/* Trending Ideas Carousel */}
-        <div className="mb-8">
+        {/* Trending Carousel */}
+        <div className="mb-8 relative">
           <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center space-x-2">
             <TrendingUp className="w-5 h-5 text-primary" />
             <span>Hot Right Now</span>
           </h2>
+
           <Carousel className="w-full">
-            <CarouselContent className="-ml-4">
-              {trendingIdeasOnly.map((idea) => (
-                <CarouselItem key={idea.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+            <CarouselContent>
+              {trendingIdeasOnly.map((idea, index) => (
+                <CarouselItem key={idea.id} className="md:basis-1/2 lg:basis-1/3">
                   <Link to={`/idea/${idea.id}`}>
                     <Card className="h-full bg-surface border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-pointer">
                       <CardHeader className="p-0">
                         <div className="relative">
-                          <img 
-                            src={idea.coverImage} 
-                            alt={idea.title}
-                            className="w-full h-48 object-cover rounded-t-lg"
-                          />
-                          <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground">
-                            <TrendingUp className="w-3 h-3 mr-1" />
-                            Trending
+                          <img src={idea.coverImage} alt={idea.title} className="w-full h-48 object-cover rounded-t-lg" />
+                          <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground flex items-center space-x-1 px-2 py-1 text-xs">
+                            <TrendingUp className="w-3 h-3" />
+                            <span>Trending</span>
                           </Badge>
                           <div className="absolute top-3 right-3 flex items-center space-x-1 bg-background/80 backdrop-blur-sm rounded-md px-2 py-1">
                             <Star className="w-3 h-3 text-yellow-500 fill-current" />
@@ -160,33 +138,20 @@ const TrendingIdeas = () => {
                           </div>
                         </div>
                       </CardHeader>
-                      <CardContent className="p-6">
-                        <div className="mb-2">
-                          <Badge variant="secondary" className="text-xs">
-                            {idea.category}
-                          </Badge>
+                      <CardContent className="p-4">
+                        <div className="mb-1">
+                          <Badge variant="secondary" className="text-xs">{idea.category}</Badge>
                         </div>
-                        <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-2">{idea.title}</h3>
-                        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{idea.description}</p>
-                        
-                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
+                        <h3 className="text-lg font-semibold text-foreground mb-1 line-clamp-2">{idea.title}</h3>
+                        <p className="text-muted-foreground text-sm mb-2 line-clamp-2">{idea.description}</p>
+                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
                           <span>by {idea.author}</span>
                           <span>{idea.timeAgo}</span>
                         </div>
-                        
                         <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                          <div className="flex items-center space-x-1">
-                            <Eye className="w-3 h-3" />
-                            <span>{idea.views.toLocaleString()}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Heart className="w-3 h-3" />
-                            <span>{idea.likes}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <MessageCircle className="w-3 h-3" />
-                            <span>{idea.comments}</span>
-                          </div>
+                          <div className="flex items-center space-x-1"><Eye className="w-3 h-3" /><span>{idea.views.toLocaleString()}</span></div>
+                          <div className="flex items-center space-x-1"><Heart className="w-3 h-3" /><span>{idea.likes}</span></div>
+                          <div className="flex items-center space-x-1"><MessageCircle className="w-3 h-3" /><span>{idea.comments}</span></div>
                         </div>
                       </CardContent>
                     </Card>
@@ -194,8 +159,13 @@ const TrendingIdeas = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="left-2" />
-            <CarouselNext className="right-2" />
+
+            <CarouselPrevious>
+              <ChevronLeft className="w-5 h-5 text-foreground" />
+            </CarouselPrevious>
+            <CarouselNext>
+              <ChevronRight className="w-5 h-5 text-foreground" />
+            </CarouselNext>
           </Carousel>
         </div>
 
@@ -233,15 +203,11 @@ const TrendingIdeas = () => {
               <Card className="h-full bg-surface border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-pointer">
                 <CardHeader className="p-0">
                   <div className="relative">
-                    <img 
-                      src={idea.coverImage} 
-                      alt={idea.title}
-                      className="w-full h-48 object-cover rounded-t-lg"
-                    />
+                    <img src={idea.coverImage} alt={idea.title} className="w-full h-48 object-cover rounded-t-lg" />
                     {idea.trending && (
-                      <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground">
-                        <TrendingUp className="w-3 h-3 mr-1" />
-                        Trending
+                      <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground flex items-center space-x-1 px-2 py-1 text-xs">
+                        <TrendingUp className="w-3 h-3" />
+                        <span>Trending</span>
                       </Badge>
                     )}
                     <div className="absolute top-3 right-3 flex items-center space-x-1 bg-background/80 backdrop-blur-sm rounded-md px-2 py-1">
@@ -250,35 +216,20 @@ const TrendingIdeas = () => {
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="p-6">
-                  <div className="mb-2">
-                    <Badge variant="secondary" className="text-xs">
-                      {idea.category}
-                    </Badge>
+                <CardContent className="p-4">
+                  <div className="mb-1">
+                    <Badge variant="secondary" className="text-xs">{idea.category}</Badge>
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-2">{idea.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{idea.description}</p>
-                  
-                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
+                  <h3 className="text-lg font-semibold text-foreground mb-1 line-clamp-2">{idea.title}</h3>
+                  <p className="text-muted-foreground text-sm mb-2 line-clamp-3">{idea.description}</p>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
                     <span>by {idea.author}</span>
                     <span>{idea.timeAgo}</span>
                   </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                      <div className="flex items-center space-x-1">
-                        <Eye className="w-3 h-3" />
-                        <span>{idea.views.toLocaleString()}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <Heart className="w-3 h-3" />
-                        <span>{idea.likes}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <MessageCircle className="w-3 h-3" />
-                        <span>{idea.comments}</span>
-                      </div>
-                    </div>
+                  <div className="flex items-center space-x-4 text-xs text-muted-foreground">
+                    <div className="flex items-center space-x-1"><Eye className="w-3 h-3" /><span>{idea.views.toLocaleString()}</span></div>
+                    <div className="flex items-center space-x-1"><Heart className="w-3 h-3" /><span>{idea.likes}</span></div>
+                    <div className="flex items-center space-x-1"><MessageCircle className="w-3 h-3" /><span>{idea.comments}</span></div>
                   </div>
                 </CardContent>
               </Card>

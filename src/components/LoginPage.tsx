@@ -252,7 +252,7 @@ const LoginPage = () => {
             Join thousands of innovators who trust our platform to bring their vision to life
           </p>
           <Link to="/ideas">
-          <Button  className="bg-white text-primary hover:bg-white/90 font-semibold px-8 py-3 text-lg shadow-xl hover:shadow-2xl transition-all duration-300">
+          <Button  className="bg-gradient-accent text-white hover:bg-white/90 font-semibold px-8 py-3 text-lg shadow-xl hover:shadow-2xl transition-all duration-300">
             Get Started Today
           </Button>
           </Link>
