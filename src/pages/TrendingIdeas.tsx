@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { TrendingUp, Eye, Heart, MessageCircle, Star, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -7,18 +7,14 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 const TrendingIdeas = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   const mockIdeas = [
     {
@@ -90,19 +86,64 @@ const TrendingIdeas = () => {
     return matchesSearch && matchesCategory;
   });
 
-  // Auto-swipe logic
+  // Infinite auto-scroll with smoother animation
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % trendingIdeasOnly.length);
-    }, 1000); // auto-swipe every 5s
-    return () => clearInterval(interval);
-  }, [trendingIdeasOnly.length]);
+    let animationFrame: number;
+    const speed = 0.5; // pixels per frame
+
+    const step = () => {
+      if (carouselRef.current && !isDragging) {
+        carouselRef.current.scrollLeft += speed;
+
+        // Reset for infinite loop
+        if (carouselRef.current.scrollLeft >= carouselRef.current.scrollWidth / 2) {
+          carouselRef.current.scrollLeft = 0;
+        }
+      }
+      animationFrame = requestAnimationFrame(step);
+    };
+    animationFrame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [isDragging]);
+
+  // Drag handlers
+  const onMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setStartX(e.pageX - (carouselRef.current?.offsetLeft || 0));
+    setScrollLeft(carouselRef.current?.scrollLeft || 0);
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !carouselRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - carouselRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // scroll-fast factor
+    carouselRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const onMouseUpOrLeave = () => setIsDragging(false);
+
+  // Touch handlers
+  const onTouchStart = (e: React.TouchEvent) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].pageX - (carouselRef.current?.offsetLeft || 0));
+    setScrollLeft(carouselRef.current?.scrollLeft || 0);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || !carouselRef.current) return;
+    const x = e.touches[0].pageX - carouselRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    carouselRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const onTouchEnd = () => setIsDragging(false);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-
       <main className="pt-20 container mx-auto px-4 py-8">
+
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-2 mb-4">
@@ -112,17 +153,26 @@ const TrendingIdeas = () => {
           <p className="text-muted-foreground">Discover the most innovative and popular ideas from our community</p>
         </div>
 
-        {/* Trending Carousel */}
+        {/* Infinite Carousel */}
         <div className="mb-8 relative">
           <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center space-x-2">
             <TrendingUp className="w-5 h-5 text-primary" />
             <span>Hot Right Now</span>
           </h2>
-
-          <Carousel className="w-full">
-            <CarouselContent>
-              {trendingIdeasOnly.map((idea, index) => (
-                <CarouselItem key={idea.id} className="md:basis-1/2 lg:basis-1/3">
+          <div
+            ref={carouselRef}
+            className="overflow-hidden relative cursor-grab"
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUpOrLeave}
+            onMouseLeave={onMouseUpOrLeave}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
+            <div className="flex space-x-4 select-none">
+              {[...trendingIdeasOnly, ...trendingIdeasOnly].map((idea, idx) => (
+                <div key={idx} className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3">
                   <Link to={`/idea/${idea.id}`}>
                     <Card className="h-full bg-surface border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-pointer">
                       <CardHeader className="p-0">
@@ -156,17 +206,10 @@ const TrendingIdeas = () => {
                       </CardContent>
                     </Card>
                   </Link>
-                </CarouselItem>
+                </div>
               ))}
-            </CarouselContent>
-
-            <CarouselPrevious>
-              <ChevronLeft className="w-5 h-5 text-foreground" />
-            </CarouselPrevious>
-            <CarouselNext>
-              <ChevronRight className="w-5 h-5 text-foreground" />
-            </CarouselNext>
-          </Carousel>
+            </div>
+          </div>
         </div>
 
         {/* Filters */}
@@ -243,6 +286,7 @@ const TrendingIdeas = () => {
             <p className="text-muted-foreground text-sm mt-2">Try adjusting your search or filter settings.</p>
           </div>
         )}
+
       </main>
     </div>
   );
