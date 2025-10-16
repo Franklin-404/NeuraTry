@@ -279,7 +279,7 @@ const TrendingIdeas = () => {
         </section>
 
         {/* Separator */}
-      <div className="my-16 h-[2px] w-full bg-gradient-to-r from-[hsl(var(--netflix-red-dark))]/20 via-[hsl(var(--netflix-red))]/80 to-[hsl(var(--netflix-red-dark))]/20 rounded-full shadow-[0_0_10px_hsl(var(--netflix-red))]" />
+      <div className="my-16 h-[1px] w-full bg-gradient-to-r from-[hsl(var(--netflix-red-dark))]/20 via-[hsl(var(--netflix-red))]/80 to-[hsl(var(--netflix-red-dark))]/20 rounded-full shadow-[0_0_10px_hsl(var(--netflix-red))]" />
 
 
         {/* Filters */}
