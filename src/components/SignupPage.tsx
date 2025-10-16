@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -236,9 +237,11 @@ export default function SignupPage() {
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join thousands of innovators who are already transforming their ideas into reality with our platform.
           </p>
+          <Link to="/ideas">
           <Button size="lg" className="bg-gradient-accent hover:bg-netflix-red-dark">
             Get Started Today
           </Button>
+          </Link>
         </div>
       </section>
     </div>
