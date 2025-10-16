@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { TrendingUp, Eye, Heart, MessageCircle, Star, Filter, Lightbulb } from "lucide-react";
+import { TrendingUp, Eye, Heart, MessageCircle, Star, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { motion } from "framer-motion";
 
 const TrendingIdeas = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,8 +20,7 @@ const TrendingIdeas = () => {
     {
       id: 1,
       title: "AI-Powered Personal Finance Assistant",
-      description:
-        "A smart assistant that analyzes spending patterns and provides personalized financial advice using machine learning.",
+      description: "A smart assistant that analyzes spending patterns and provides personalized financial advice using machine learning.",
       category: "AI & Technology",
       views: 12500,
       likes: 892,
@@ -35,8 +34,7 @@ const TrendingIdeas = () => {
     {
       id: 2,
       title: "Sustainable Urban Farming Network",
-      description:
-        "Community-driven platform connecting urban farmers to share resources, knowledge, and harvest distribution.",
+      description: "Community-driven platform connecting urban farmers to share resources, knowledge, and harvest distribution.",
       category: "Sustainability",
       views: 8300,
       likes: 654,
@@ -48,10 +46,9 @@ const TrendingIdeas = () => {
       timeAgo: "5 hours ago",
     },
     {
-      id: 4,
+      id: 3,
       title: "Smart Waste Management System",
-      description:
-        "IoT-enabled waste bins that optimize collection routes and reduce environmental impact.",
+      description: "IoT-enabled waste bins that optimize collection routes and reduce environmental impact.",
       category: "Smart Cities",
       views: 6700,
       likes: 445,
@@ -63,10 +60,9 @@ const TrendingIdeas = () => {
       timeAgo: "3 hours ago",
     },
     {
-      id: 6,
+      id: 4,
       title: "AR Learning Platform for Kids",
-      description:
-        "Interactive augmented reality educational content that makes learning fun and engaging for children.",
+      description: "Interactive augmented reality educational content that makes learning fun and engaging for children.",
       category: "Education",
       views: 11200,
       likes: 987,
@@ -77,126 +73,107 @@ const TrendingIdeas = () => {
       author: "Lisa Martinez",
       timeAgo: "4 hours ago",
     },
-
-    // 🔹 Non-trending ideas
     {
-      id: 7,
-      title: "Blockchain Voting System",
-      description:
-        "A secure, transparent voting platform that leverages blockchain to prevent fraud and ensure trust in elections.",
-      category: "Blockchain",
-      views: 5300,
-      likes: 380,
-      comments: 42,
-      rating: 4.2,
-      trending: false,
-      coverImage: "/placeholder.svg",
-      author: "John Doe",
-      timeAgo: "1 day ago",
-    },
-    {
-      id: 8,
-      title: "Healthcare Companion Chatbot",
-      description:
-        "An AI-driven chatbot that assists patients with medication reminders, symptom tracking, and appointment scheduling.",
+      id: 5,
+      title: "Mental Health Companion App",
+      description: "An AI chatbot that checks in daily and offers guided meditation or positive affirmations.",
       category: "Healthcare",
-      views: 7400,
-      likes: 512,
-      comments: 64,
-      rating: 4.5,
-      trending: false,
-      coverImage: "/placeholder.svg",
-      author: "Emily Zhang",
-      timeAgo: "10 hours ago",
-    },
-    {
-      id: 9,
-      title: "Decentralized Cloud Storage Network",
-      description:
-        "A peer-to-peer storage platform that enhances data privacy and reduces dependency on centralized servers.",
-      category: "Blockchain",
-      views: 4900,
-      likes: 275,
-      comments: 31,
-      rating: 4.1,
-      trending: false,
-      coverImage: "/placeholder.svg",
-      author: "Carlos Rivera",
-      timeAgo: "2 days ago",
-    },
-    {
-      id: 10,
-      title: "Remote Work Collaboration Hub",
-      description:
-        "An integrated suite combining video conferencing, task management, and real-time whiteboards for hybrid teams.",
-      category: "AI & Technology",
-      views: 8600,
-      likes: 601,
-      comments: 72,
-      rating: 4.6,
+      views: 4100,
+      likes: 321,
+      comments: 56,
+      rating: 4.2,
       trending: false,
       coverImage: "/placeholder.svg",
       author: "Nina Patel",
       timeAgo: "8 hours ago",
     },
     {
-      id: 11,
-      title: "Smart Parking Assistance App",
-      description:
-        "App that uses live sensor data and predictive analytics to find and reserve parking spots in busy cities.",
+      id: 6,
+      title: "Blockchain Donation Tracker",
+      description: "Transparency for nonprofits—track exactly where your donation goes using blockchain verification.",
+      category: "Blockchain",
+      views: 5200,
+      likes: 289,
+      comments: 42,
+      rating: 4.5,
+      trending: false,
+      coverImage: "/placeholder.svg",
+      author: "David Kim",
+      timeAgo: "1 day ago",
+    },
+    {
+      id: 7,
+      title: "Smart Home Energy Saver",
+      description: "IoT-based energy optimization system that learns your habits and reduces power waste.",
       category: "Smart Cities",
-      views: 9200,
-      likes: 742,
-      comments: 83,
+      views: 7300,
+      likes: 412,
+      comments: 68,
+      rating: 4.3,
+      trending: false,
+      coverImage: "/placeholder.svg",
+      author: "Emma Brown",
+      timeAgo: "2 days ago",
+    },
+    {
+      id: 8,
+      title: "Crowdsourced Language Learning",
+      description: "Learn new languages by teaching others what you already know — powered by real people.",
+      category: "Education",
+      views: 5900,
+      likes: 350,
+      comments: 47,
+      rating: 4.6,
+      trending: false,
+      coverImage: "/placeholder.svg",
+      author: "Omar Ali",
+      timeAgo: "3 days ago",
+    },
+    {
+      id: 9,
+      title: "AI Music Composer",
+      description: "Generate custom background music based on your mood, genre, and tempo preferences.",
+      category: "AI & Technology",
+      views: 8200,
+      likes: 578,
+      comments: 102,
       rating: 4.7,
       trending: false,
       coverImage: "/placeholder.svg",
-      author: "Ahmed Khan",
-      timeAgo: "6 hours ago",
+      author: "Sophia Lee",
+      timeAgo: "2 days ago",
     },
     {
-      id: 12,
-      title: "Mental Health Journal App",
-      description:
-        "A digital journaling platform that uses sentiment analysis to track emotional well-being over time.",
-      category: "Healthcare",
-      views: 5600,
-      likes: 428,
-      comments: 58,
+      id: 10,
+      title: "Virtual Career Fair Hub",
+      description: "A platform where companies host virtual booths and students can network in real-time.",
+      category: "Smart Cities",
+      views: 6400,
+      likes: 310,
+      comments: 59,
       rating: 4.4,
       trending: false,
       coverImage: "/placeholder.svg",
-      author: "Riley Brooks",
-      timeAgo: "1 day ago",
+      author: "Michael Roberts",
+      timeAgo: "4 days ago",
     },
   ];
 
-  const categories = [
-    "all",
-    "AI & Technology",
-    "Sustainability",
-    "Healthcare",
-    "Smart Cities",
-    "Blockchain",
-    "Education",
-  ];
-
+  const categories = ["all", "AI & Technology", "Sustainability", "Healthcare", "Smart Cities", "Blockchain", "Education"];
   const trendingIdeasOnly = mockIdeas.filter((idea) => idea.trending);
 
   const filteredIdeas = mockIdeas.filter((idea) => {
     const matchesSearch =
       idea.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       idea.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" || idea.category === selectedCategory;
+    const matchesCategory = selectedCategory === "all" || idea.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  // Infinite auto-scroll
+  // Infinite smooth carousel
   useEffect(() => {
     let animationFrame: number;
     const speed = 0.5;
-
     const step = () => {
       if (carouselRef.current && !isDragging) {
         carouselRef.current.scrollLeft += speed;
@@ -210,13 +187,17 @@ const TrendingIdeas = () => {
     return () => cancelAnimationFrame(animationFrame);
   }, [isDragging]);
 
+  // Scroll to top on load
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   // Drag handlers
   const onMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     setStartX(e.pageX - (carouselRef.current?.offsetLeft || 0));
     setScrollLeft(carouselRef.current?.scrollLeft || 0);
   };
-
   const onMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !carouselRef.current) return;
     e.preventDefault();
@@ -224,7 +205,6 @@ const TrendingIdeas = () => {
     const walk = (x - startX) * 2;
     carouselRef.current.scrollLeft = scrollLeft - walk;
   };
-
   const onMouseUpOrLeave = () => setIsDragging(false);
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -232,14 +212,12 @@ const TrendingIdeas = () => {
     setStartX(e.touches[0].pageX - (carouselRef.current?.offsetLeft || 0));
     setScrollLeft(carouselRef.current?.scrollLeft || 0);
   };
-
   const onTouchMove = (e: React.TouchEvent) => {
     if (!isDragging || !carouselRef.current) return;
     const x = e.touches[0].pageX - carouselRef.current.offsetLeft;
     const walk = (x - startX) * 2;
     carouselRef.current.scrollLeft = scrollLeft - walk;
   };
-
   const onTouchEnd = () => setIsDragging(false);
 
   return (
@@ -247,22 +225,21 @@ const TrendingIdeas = () => {
       <Navbar />
       <main className="pt-20 container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-2 mb-4">
-            <Lightbulb className="w-6 h-6 text-primary" />
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-3">
+            <Lightbulb className="w-7 h-7 text-primary" />
             <h1 className="text-3xl font-bold text-foreground">Ideas</h1>
           </div>
-          <p className="text-muted-foreground">
-            Discover the most innovative and popular ideas from our community
-          </p>
+          <p className="text-muted-foreground">Discover, explore and share the most innovative ideas from our community.</p>
         </div>
 
-        {/* Carousel */}
-        <div className="mb-8 relative">
-          <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center space-x-2">
+        {/* Trending Carousel Section */}
+        <section className="bg-gradient-to-b from-background via-surface/50 to-background rounded-2xl p-6 shadow-inner mb-12">
+          <h2 className="text-2xl font-semibold text-foreground flex items-center gap-2 mb-4">
             <TrendingUp className="w-5 h-5 text-primary" />
-            <span>Trending Ideas</span>
+            Trending Ideas
           </h2>
+
           <div
             ref={carouselRef}
             className="overflow-hidden relative cursor-grab"
@@ -276,170 +253,113 @@ const TrendingIdeas = () => {
           >
             <div className="flex space-x-4 select-none">
               {[...trendingIdeasOnly, ...trendingIdeasOnly].map((idea, idx) => (
-                <div key={idx} className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3">
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: idx * 0.05 }}
+                  className="flex-shrink-0 w-[85%] sm:w-1/2 lg:w-1/3"
+                >
                   <Link to={`/idea/${idea.id}`}>
-                    <Card className="h-full bg-surface border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-pointer">
-                      <CardHeader className="p-0">
-                        <div className="relative">
-                          <img
-                            src={idea.coverImage}
-                            alt={idea.title}
-                            className="w-full h-48 object-cover rounded-t-lg"
-                          />
-                          <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground flex items-center space-x-1 px-2 py-1 text-xs">
-                            <TrendingUp className="w-3 h-3" />
-                            <span>Trending</span>
-                          </Badge>
-                          <div className="absolute top-3 right-3 flex items-center space-x-1 bg-background/80 backdrop-blur-sm rounded-md px-2 py-1">
-                            <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                            <span className="text-xs font-medium text-foreground">{idea.rating}</span>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="p-4">
-                        <div className="mb-1">
-                          <Badge variant="secondary" className="text-xs">
-                            {idea.category}
-                          </Badge>
-                        </div>
-                        <h3 className="text-lg font-semibold text-foreground mb-1 line-clamp-2">
-                          {idea.title}
-                        </h3>
-                        <p className="text-muted-foreground text-sm mb-2 line-clamp-2">
-                          {idea.description}
-                        </p>
-                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
-                          <span>by {idea.author}</span>
-                          <span>{idea.timeAgo}</span>
-                        </div>
-                        <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                          <div className="flex items-center space-x-1">
-                            <Eye className="w-3 h-3" />
-                            <span>{idea.views.toLocaleString()}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Heart className="w-3 h-3" />
-                            <span>{idea.likes}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <MessageCircle className="w-3 h-3" />
-                            <span>{idea.comments}</span>
-                          </div>
-                        </div>
-                      </CardContent>
+                    <Card className="overflow-hidden relative bg-surface hover:shadow-lg hover:scale-[1.02] transition-all duration-500">
+                      <img src={idea.coverImage} alt={idea.title} className="w-full h-48 object-cover" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent p-4 flex flex-col justify-end">
+                        <Badge className="mb-2 bg-primary text-white text-xs w-fit flex items-center gap-1">
+                          <TrendingUp className="w-3 h-3" /> Trending
+                        </Badge>
+                        <h3 className="text-lg font-semibold text-white line-clamp-2">{idea.title}</h3>
+                        <p className="text-xs text-gray-300 line-clamp-2">{idea.description}</p>
+                      </div>
                     </Card>
                   </Link>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
-        </div>
-        <div className="relative flex items-center justify-center my-12">
-  <div className="flex-grow border-t border-[hsl(var(--border))]"></div>
-  <span className="mx-4 text-sm text-muted-foreground uppercase tracking-wider">
-    Explore Ideas
-  </span>
-  <div className="flex-grow border-t border-[hsl(var(--border))]"></div>
-</div>
+        </section>
+
+        {/* Separator */}
+      <div className="my-16 h-[2px] w-full bg-gradient-to-r from-[hsl(var(--netflix-red-dark))]/20 via-[hsl(var(--netflix-red))]/80 to-[hsl(var(--netflix-red-dark))]/20 rounded-full shadow-[0_0_10px_hsl(var(--netflix-red))]" />
 
 
         {/* Filters */}
-        <div className="mb-8 flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <Input
-              placeholder="Search ideas..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-surface border-border"
-            />
+        <div className="mb-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
+          <Input
+            placeholder="Search ideas..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-surface border-border sm:w-1/3"
+          />
+
+          <div className="flex flex-wrap gap-2 justify-center sm:justify-end">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-1 rounded-full text-sm transition-all ${
+                  selectedCategory === cat
+                    ? "bg-[hsl(var(--netflix-red))] text-white"
+                    : "bg-surface hover:bg-muted text-foreground/80"
+                }`}
+              >
+                {cat === "all" ? "All" : cat}
+              </button>
+            ))}
           </div>
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-48 bg-surface border-border">
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent className="bg-popover border-border">
-              {categories.map((category) => (
-                <SelectItem key={category} value={category} className="capitalize">
-                  {category === "all" ? "All Categories" : category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button variant="outline" size="icon" className="border-border">
-            <Filter className="w-4 h-4" />
-          </Button>
         </div>
 
         {/* Ideas Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredIdeas.map((idea) => (
-            <Link key={idea.id} to={`/idea/${idea.id}`}>
-              <Card className="h-full bg-surface border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-pointer">
-                <CardHeader className="p-0">
-                  <div className="relative">
-                    <img
-                      src={idea.coverImage}
-                      alt={idea.title}
-                      className="w-full h-48 object-cover rounded-t-lg"
-                    />
-                    {idea.trending && (
-                      <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground flex items-center space-x-1 px-2 py-1 text-xs">
-                        <TrendingUp className="w-3 h-3" />
-                        <span>Trending</span>
+          {filteredIdeas.map((idea, i) => (
+            <motion.div
+              key={idea.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: i * 0.05 }}
+            >
+              <Link to={`/idea/${idea.id}`}>
+                <Card className="h-full bg-surface border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
+                  <CardContent className="p-0">
+                    <div className="relative">
+                      <img src={idea.coverImage} alt={idea.title} className="w-full h-48 object-cover rounded-t-lg" />
+                      <div className="absolute top-3 right-3 flex items-center space-x-1 bg-background/80 backdrop-blur-sm rounded-md px-2 py-1">
+                        <Star className="w-3 h-3 text-yellow-500 fill-current" />
+                        <span className="text-xs font-medium text-foreground">{idea.rating}</span>
+                      </div>
+                    </div>
+
+                    <div className="p-4">
+                      <Badge variant="secondary" className="text-xs mb-1">
+                        {idea.category}
                       </Badge>
-                    )}
-                    <div className="absolute top-3 right-3 flex items-center space-x-1 bg-background/80 backdrop-blur-sm rounded-md px-2 py-1">
-                      <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                      <span className="text-xs font-medium text-foreground">{idea.rating}</span>
+                      <h3 className="text-lg font-semibold text-foreground mb-1 line-clamp-2">{idea.title}</h3>
+                      <p className="text-muted-foreground text-sm mb-3 line-clamp-3">{idea.description}</p>
+
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <span>by {idea.author}</span>
+                        <span>{idea.timeAgo}</span>
+                      </div>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-4">
-                  <div className="mb-1">
-                    <Badge variant="secondary" className="text-xs">
-                      {idea.category}
-                    </Badge>
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-1 line-clamp-2">
-                    {idea.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm mb-2 line-clamp-3">
-                    {idea.description}
-                  </p>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
-                    <span>by {idea.author}</span>
-                    <span>{idea.timeAgo}</span>
-                  </div>
-                  <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                    <div className="flex items-center space-x-1">
-                      <Eye className="w-3 h-3" />
-                      <span>{idea.views.toLocaleString()}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Heart className="w-3 h-3" />
-                      <span>{idea.likes}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <MessageCircle className="w-3 h-3" />
-                      <span>{idea.comments}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+                  </CardContent>
+                </Card>
+              </Link>
+            </motion.div>
           ))}
         </div>
 
         {filteredIdeas.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground text-lg">
-              No ideas found matching your criteria.
-            </p>
-            <p className="text-muted-foreground text-sm mt-2">
-              Try adjusting your search or filter settings.
-            </p>
+            <p className="text-muted-foreground text-lg">No ideas found matching your criteria.</p>
           </div>
         )}
+
+        {/* CTA Section */}
+        <div className="text-center mt-16">
+          <h3 className="text-xl font-semibold mb-2">Have an idea to share?</h3>
+          <Button asChild>
+            <Link to="/submit-idea">Submit Your Idea</Link>
+          </Button>
+        </div>
       </main>
     </div>
   );
