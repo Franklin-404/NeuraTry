@@ -15,6 +15,25 @@ const TrendingIdeas = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  
+    {/* Smooth Auto-Scroll Logic */}
+  {useEffect(() => {
+    let animationFrame: number;
+    const speed = 0.15; // slower, smoother drift
+
+    const step = () => {
+      if (carouselRef.current && !isDragging) {
+        carouselRef.current.scrollLeft += speed;
+        if (carouselRef.current.scrollLeft >= carouselRef.current.scrollWidth / 2) {
+          carouselRef.current.scrollLeft = 0;
+        }
+      }
+      animationFrame = requestAnimationFrame(step);
+    };
+
+    animationFrame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [isDragging])}
 
   const mockIdeas = [
     {
@@ -233,53 +252,61 @@ const TrendingIdeas = () => {
           <p className="text-muted-foreground">Discover, explore and share the most innovative ideas from our community.</p>
         </div>
 
-        {/* Trending Carousel Section */}
-        <section className="bg-gradient-to-b from-background via-surface/50 to-background rounded-2xl p-6 shadow-inner mb-12">
-          <h2 className="text-2xl font-semibold text-foreground flex items-center gap-2 mb-4">
-            <TrendingUp className="w-5 h-5 text-primary" />
-            Trending Ideas
-          </h2>
+       {/* Trending Carousel Section */}
+<section className="bg-gradient-to-b from-background via-surface/50 to-background rounded-2xl p-6 shadow-inner mb-12">
+  <h2 className="text-2xl font-semibold text-foreground flex items-center gap-2 mb-4">
+    <TrendingUp className="w-5 h-5 text-primary" />
+    Trending Ideas
+  </h2>
 
-          <div
-            ref={carouselRef}
-            className="overflow-hidden relative cursor-grab"
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUpOrLeave}
-            onMouseLeave={onMouseUpOrLeave}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-          >
-            <div className="flex space-x-4 select-none">
-              {[...trendingIdeasOnly, ...trendingIdeasOnly].map((idea, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: idx * 0.05 }}
-                  className="flex-shrink-0 w-[85%] sm:w-1/2 lg:w-1/3"
-                >
-                  <Link to={`/idea/${idea.id}`}>
-                    <Card className="overflow-hidden relative bg-surface hover:shadow-lg hover:scale-[1.02] transition-all duration-500">
-                      <img src={idea.coverImage} alt={idea.title} className="w-full h-48 object-cover" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent p-4 flex flex-col justify-end">
-                        <Badge className="mb-2 bg-primary text-white text-xs w-fit flex items-center gap-1">
-                          <TrendingUp className="w-3 h-3" /> Trending
-                        </Badge>
-                        <h3 className="text-lg font-semibold text-white line-clamp-2">{idea.title}</h3>
-                        <p className="text-xs text-gray-300 line-clamp-2">{idea.description}</p>
-                      </div>
-                    </Card>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+  <div
+    ref={carouselRef}
+    className="overflow-x-hidden relative cursor-grab touch-pan-y"
+    onMouseDown={onMouseDown}
+    onMouseMove={onMouseMove}
+    onMouseUp={onMouseUpOrLeave}
+    onMouseLeave={onMouseUpOrLeave}
+    onTouchStart={onTouchStart}
+    onTouchMove={onTouchMove}
+    onTouchEnd={onTouchEnd}
+  >
+    <div className="flex space-x-4 select-none">
+      {[...trendingIdeasOnly, ...trendingIdeasOnly].map((idea, idx) => (
+        <motion.div
+          key={idx}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: idx * 0.05 }}
+          className="flex-shrink-0 w-[85%] sm:w-1/2 lg:w-1/3"
+        >
+          <Link to={`/idea/${idea.id}`}>
+            <Card className="overflow-hidden relative bg-surface hover:shadow-lg hover:scale-[1.02] transition-transform duration-500">
+              <img
+                src={idea.coverImage}
+                alt={idea.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent p-4 flex flex-col justify-end">
+                <Badge className="mb-2 bg-primary text-white text-xs w-fit flex items-center gap-1">
+                  <TrendingUp className="w-3 h-3" /> Trending
+                </Badge>
+                <h3 className="text-lg font-semibold text-white line-clamp-2">{idea.title}</h3>
+                <p className="text-xs text-gray-300 line-clamp-2">{idea.description}</p>
+              </div>
+            </Card>
+          </Link>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+
+
+</section>
+
 
         {/* Separator */}
-      <div className="my-16 h-[2px] w-full bg-gradient-to-r from-[hsl(var(--netflix-red-dark))]/20 via-[hsl(var(--netflix-red))]/80 to-[hsl(var(--netflix-red-dark))]/20 rounded-full shadow-[0_0_10px_hsl(var(--netflix-red))]" />
+      <div className="my-16 h-[4px] w-full bg-gradient-to-r from-[hsl(var(--netflix-red-dark))]/20 via-[hsl(var(--netflix-red))]/80 to-[hsl(var(--netflix-red-dark))]/20 rounded-full shadow-[0_0_10px_hsl(var(--netflix-red))]" />
 
 
         {/* Filters */}
