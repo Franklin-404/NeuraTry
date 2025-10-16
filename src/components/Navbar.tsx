@@ -90,20 +90,22 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <Link to="/profile">
+         {/* Profile Avatar with pulsing badge */}
+          <Link to="/profile" className="relative">
             <Avatar className="w-8 h-8 cursor-pointer ring-2 ring-transparent hover:ring-primary transition-all">
               <AvatarImage src="/placeholder.svg" />
-              
               <AvatarFallback className="bg-surface text-foreground">
                 <User className="w-4 h-4" />
               </AvatarFallback>
-              <Badge
-                variant="destructive"
-                className="absolute -bottom-0 -left-0 w-4 h-4 p-0 flex items-center justify-center text-xs"
-              >
-                3
-              </Badge>
             </Avatar>
+
+            {/* Pulsing notification count */}
+            <Badge
+              variant="destructive"
+              className="absolute -bottom-0.5 -left-0.5 w-4 h-4 rounded-full p-0 flex items-center justify-center text-[10px] font-semibold bg-[hsl(var(--netflix-red))] text-white border-2 border-background animate-[pulseGlow_2s_infinite]"
+            >
+              3
+            </Badge>
           </Link>
         </div>
       </div>
